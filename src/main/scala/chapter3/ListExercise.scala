@@ -97,6 +97,59 @@ object List {
 //      case Cons(h, t) => Cons(h, Cons(x, t))
 //    })
 //  }
+
+  // Exercise 14
+  def append[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)((x, y) => Cons(x, y))
+
+  // Exercise 16
+  def appendOne(ns: List[Int]): List[Int] =
+    foldRight(ns, Nil:List[Int])((x, y) => Cons(x+1, y) )
+
+  // Exercise 17
+  def doubleToString(ns: List[Double]): List[String] =
+    foldRight(ns, Nil:List[String])((x, y) => Cons(x.toString, y) )
+
+  // Exercise 18
+  def map[A, B](as: List[A])(f: A => B): List[B] =
+    foldRight(as, Nil:List[B])((x, y) => Cons(f(x), y))
+
+  // Exercise 19
+  def filter[A](as: List[A])(f: A => Boolean): List[A] =
+    foldRight(as, Nil:List[A])((x, y) => if(f(x)) Cons(x, y) else y)
+
+  // Exercise 20
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = {
+    def prepend(l: List[B], r: List[B]): List[B] =
+      l match {
+        case Nil => r
+        case Cons(head, tail) => Cons(head, prepend(tail, r))
+      }
+
+    foldRight(as, Nil:List[B])((x, y) => prepend(f(x), y))
+  }
+
+  // Exercise 21
+  def filter2[A](as: List[A])(f: A => Boolean): List[A] =
+    flatMap(as)(x => if(f(x)) Cons(x, Nil) else Nil)
+
+  // Exercise 22
+  def zipPlus(l: List[Int], r: List[Int]): List[Int] =
+    (l, r) match {
+      case (Nil, Nil) => Nil
+      case (Cons(head, tail), Nil) => Cons(head, tail)
+      case (Nil, Cons(head, tail)) => Cons(head, tail)
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1 + h2, zipPlus(t1, t2))
+    }
+
+  // Exericse 23
+  def zipWith[A](l: List[A], r: List[A])(f: (A, A) => A): List[A] =
+    (l, r) match {
+      case (Nil, Nil) => Nil
+      case (Cons(head, tail), Nil) => Cons(head, tail)
+      case (Nil, Cons(head, tail)) => Cons(head, tail)
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
+    }
 }
 
 object ListExercise extends App {
@@ -148,5 +201,42 @@ object ListExercise extends App {
   println(List.product3(List(1, 2, 3, 4)))
 
   // Exercise 12
-//  println(List.reverse(List(1, 2, 3, 4)))
+  // TODO
+  // println(List.reverse(List(1, 2, 3, 4)))
+
+  // Exercise 13
+  // TODO
+
+  // Exercise 14
+  println(List.append(List(1, 2, 3), List(4, 5, 6)))
+
+  // Exercise 15
+  // TODO
+
+  // Exercise 16
+  println(List.appendOne(List(1, 2, 3)))
+
+  // Exercise 17
+  println(List.doubleToString(List(1.0, 2.0, 3.0)))
+
+  // Exercise 18
+  println(List.map(List(1, 2, 3))(x => x + 1))
+
+  // Exercise 19
+  println(List.filter(List(1, 2, 3))(x => x % 2 == 0))
+
+  // Exercise 20
+  println(List.flatMap(List(1, 2, 3))(i => List(i, i)))
+
+  // Exercise 21
+  println(List.filter2(List(1, 2, 3))(x => x % 2 == 0))
+
+  // Exercise 22
+  println(List.zipPlus(List(1, 2, 3), List(4, 5, 6)))
+
+  // Exercise 23
+  println(List.zipWith(List(1, 2, 3), List(4, 5, 6))((x, y) => x + y))
+
+  // Exercise 24
+  // TODO
 }
